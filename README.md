@@ -20,3 +20,5 @@ Setup and configuration:
  Run the following commands to create the DB and tables
  - project-dir$ rake db:create
  - project-dir$ rake db:migrate
+
+ Live Demo: https://railschat-app.herokuapp.com/
