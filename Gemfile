@@ -53,6 +53,10 @@ group :test do
   gem 'chromedriver-helper'
 end
 
+group :production do
+  gem 'rails_12factor', group: :production
+end
+
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 
