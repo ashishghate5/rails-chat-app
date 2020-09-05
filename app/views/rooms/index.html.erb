@@ -1,0 +1,19 @@
+<div class="row">
+  <div class="col-12 col-md-3">
+    <div class="users_list">
+      <%= render partial: 'rooms', locals: { users: @users} %>
+    </div>
+  </div>
+
+  <div class="col">
+    <div class="alert alert-primary">
+      <h4 class="alert-heading">
+        Welcome to the GKMIT Chat
+      </h4>
+      <hr />
+      <p>
+        Click on username to start the chat
+      </p>
+    </div>
+  </div>
+</div>

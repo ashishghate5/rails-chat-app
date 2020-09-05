@@ -1,0 +1,22 @@
+<div class="input-group">
+  <input type="text" class="form-control" id="username_search" autocomplete="off" placeholder="Search" name="search">
+  <div class="input-group-btn">
+    <button class="btn btn-primary" type="submit" id="username_submit" onClick="check_user();">Search</button>
+  </div>
+</div>
+<h3 class="text-muted mb-0">
+  Friends
+</h3>
+
+<hr class="mt-1">
+<% if users.present? %>
+  <nav class="nav flex-column">
+    <% users.each do |user| %>
+      <%= link_to user.username, rooms_path(user_id: user.id), method: :post, class: 'nav-link room-nav-link' %>
+    <% end %>
+  </nav>
+<% else %>
+  <div class="text-muted">
+    The are no rooms
+  </div>
+<% end %>
