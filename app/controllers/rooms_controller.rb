@@ -1,26 +1,29 @@
 class RoomsController < ApplicationController
-  before_action :load_room, :authenticate_room_user, only: [:show]
-  before_action :get_friend_id, only: [:create]
-  before_action :get_friends_list, only: [:index, :show, :user_autocomplete]
+  before_action :load_conversation, :authenticate_conversation, only: [:show]
+  before_action :set_friend_id, only: [:create]
+  before_action :get_friends, only: [:index, :show, :user_autocomplete]
 
   def index
   end
 
+  # Find or create the conversation
   def create
-    @room = Room.between(current_user.id, @friend_id)
-    unless @room.present?
-      @room = current_user.rooms.build(friend_id: @friend_id)
-      @room.save
+    @conversation = Room.find_conversation(current_user.id, @friend_id)
+    unless @conversation.present?
+      @conversation = current_user.rooms.build(friend_id: @friend_id)
+      @conversation.save
     end
-    redirect_to room_path(@room)
+    redirect_to room_path(@conversation)
   end
 
+  # Show conversation with friend, load all messages
   def show
-    @room_message = RoomMessage.new room: @room
-    @friend = @room.find_friend(current_user)
-    @room_messages = @room.room_messages.includes(:user)
+    @message = RoomMessage.new room: @conversation
+    @friend = @conversation.find_friend(current_user)
+    @messages = @conversation.room_messages.includes(:user)
   end
 
+  # Search for the friend to start chat
   def user_autocomplete
     @users = @users.order(:username).where("username like ?", "%#{params[:value]}%")
     respond_to do |format|
@@ -30,20 +33,23 @@ class RoomsController < ApplicationController
 
   protected
 
-  def get_friend_id
+  def set_friend_id
     @friend_id = params[:user_id]
   end
 
-  def get_friends_list
-    @users = FriendsListService.new(current_user).call
+  # Get all friends
+  def get_friends
+    @users = User.get_friends(current_user)
   end
 
-  def load_room
-    @room = Room.find(params[:id]) if params[:id]
+  # Load conversation with friend
+  def load_conversation
+    @conversation = ConversationService.new(params[:id]).call if params[:id]
   end
 
-  def authenticate_room_user
-    unless @room.authenticate_room_user(current_user)
+  # Authenticate users for conversation
+  def authenticate_conversation
+    unless @conversation.authenticate_user_for_conversation(current_user)
       redirect_to rooms_path
     end
   end

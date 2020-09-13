@@ -1,5 +1,4 @@
 <h1>
-  <img src="<%= @friend.gravatar_url %>" class="avatar" alt="">
   <%= @friend.username %>
 </h1>
 
@@ -11,19 +10,19 @@
   </div>
 
   <div class="col" style="width:300px;">
-    <div class="chat" data-channel-subscribe="room" data-room-id="<%= @room.id %> " data-user-id="<%= current_user.id %> ">
-      <% @room_messages.each do |room_message| %>
+    <div class="chat" data-channel-subscribe="room" data-room-id="<%= @conversation.id %> " data-user-id="<%= current_user.id %> ">
+      <% @messages.each do |message| %>
         <div class="chat-message-container">
           <div class="row no-gutters">
             <div class="col">
-              <div class="message-content" style="width:500px; float:<%= set_float_value(room_message) %>;">
+              <div class="message-content" style="width:500px; float:<%= set_float_value(message) %>;">
                 <p class="mb-1">
-                  <%= room_message.message %>
+                  <%= message.message %>
                 </p>
 
                 <div class="text-right">
                   <small>
-                    <%= room_message.created_at %>
+                    <%= message.created_at %>
                   </small>
                 </div>
               </div>
@@ -33,7 +32,7 @@
       <% end %>
     </div>
 
-    <%= simple_form_for @room_message, remote: true do |form| %>
+    <%= simple_form_for @message, remote: true do |form| %>
       <div class="input-group mb-3">
         <%= form.input :message, as: :string, wrapper: false, label: false, input_html: { class: 'chat-input', autocomplete: 'off' } %>
         <div class="input-group-append">
